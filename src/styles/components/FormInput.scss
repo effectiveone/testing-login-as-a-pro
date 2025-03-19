@@ -1,0 +1,59 @@
+// Zmienne kolorów
+$error-color: #ff3c3c;
+$focus-color: #2684ff;
+$label-color: #333;
+$input-border: #ddd;
+$input-hover-border: #bbb;
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  position: relative;
+  
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: $label-color;
+    font-size: 0.9rem;
+  }
+  
+  input {
+    padding: 0.75rem;
+    border: 1px solid $input-border;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      border-color: $input-hover-border;
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: $focus-color;
+      box-shadow: 0 0 0 1px rgba($focus-color, 0.3);
+    }
+    
+    &.error {
+      border-color: $error-color;
+      background-color: rgba($error-color, 0.05);
+      
+      &:focus {
+        box-shadow: 0 0 0 1px rgba($error-color, 0.3);
+      }
+    }
+  }
+  
+  .error-message {
+    color: $error-color;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+} 

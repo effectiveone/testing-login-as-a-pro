@@ -1,0 +1,72 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Testowanie i budowanie
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Użycie Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Instalacja zależności
+        run: npm ci
+
+      - name: Lintowanie kodu
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Uruchomienie testów
+        run: npm test -- --watchAll=false
+
+      - name: Budowa aplikacji
+        run: npm run build
+        if: success()
+
+      - name: Archiwizacja artefaktów budowania
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build
+        if: success()
+
+  deploy:
+    name: Wdrożenie na Netlify
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pobranie artefaktów budowania
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: build
+
+      - name: Wdrożenie na Netlify
+        uses: nwtgck/actions-netlify@v1
+        with:
+          publish-dir: './build'
+          production-branch: main
+          deploy-message: 'Wdrożenie z GitHub Actions'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 5

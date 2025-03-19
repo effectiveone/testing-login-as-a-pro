@@ -1,0 +1,49 @@
+// Główne kolory
+$primary-color: #3f51b5;
+$secondary-color: #f50057;
+$success-color: #4BB543;
+$error-color: #ff3c3c;
+$warning-color: #FFC107;
+$info-color: #03A9F4;
+
+// Kolory tekstu
+$text-primary: #333;
+$text-secondary: #666;
+$text-light: #999;
+
+// Tło
+$bg-light: #fafafa;
+$bg-white: #ffffff;
+$bg-dark: #212121;
+
+// Breakpointy
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Czcionki
+$font-family-base: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 16px;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+// Cienie
+$box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+$box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+// Odstępy
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 3rem;
+
+// Border radius
+$border-radius-sm: 2px;
+$border-radius-md: 4px;
+$border-radius-lg: 8px;
+$border-radius-circle: 50%; 
