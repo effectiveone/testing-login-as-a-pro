@@ -11,8 +11,9 @@ import './App.css';
  * @returns {JSX.Element} - Element JSX reprezentujący aplikację
  */
 function App({ isTest = process.env.NODE_ENV === 'test' }) {
-  const { formik, isSubmitting, successMessage, error, resetSuccess } =
-    useLoginForm({ isTest });
+  const { formik, isSubmitting, successMessage, error } = useLoginForm({
+    isTest,
+  });
 
   return (
     <div className='App'>
