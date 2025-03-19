@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# testing-login-as-a-pro
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This project focuses on testing a login system using the **Yup** validation library. The core of the documentation is built around unit and integration tests, ensuring form validation and proper login behavior.
 
-In the project directory, you can run:
+## Tech Stack
 
-### `npm start`
+- **React** (for the login form UI)
+- **Yup** (for validation)
+- **@testing-library/react** (for unit and integration tests)
+- **Jest** (for test execution)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features Tested
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Form field rendering**: Ensures that all necessary input fields and labels are present.
+- **Validation rules**: Checks if Yup correctly validates login credentials.
+- **Error handling**: Ensures errors appear for invalid input (empty fields, short passwords, etc.).
+- **Form submission behavior**: Tests if correct credentials allow successful login.
 
-### `npm test`
+## Test Examples
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The test suite covers multiple scenarios:
 
-### `npm run build`
+### Checking element existence
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+import { render, screen } from '@testing-library/react';
+import App from './App';
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+describe('Element existence in the login form', () => {
+  it('should render login and password inputs', () => {
+    render(<App />);
+    expect(screen.getByTestId('login-input')).toBeInTheDocument();
+    expect(screen.getByTestId('password-input')).toBeInTheDocument();
+  });
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  it('should have a login button', () => {
+    render(<App />);
+    expect(screen.getByText(/login/i)).toBeInTheDocument();
+  });
+});
+```
 
-### `npm run eject`
+### Validation Tests
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```js
+import { fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+describe('Login validation', () => {
+  it('should show an error when login is empty', async () => {
+    render(<App />);
+    fireEvent.click(screen.getByText(/login/i));
+    expect(
+      await screen.findByText(/Login field is required/i),
+    ).toBeInTheDocument();
+  });
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  it('should show an error for short login', async () => {
+    render(<App />);
+    await userEvent.type(screen.getByTestId('login-input'), 'abc');
+    fireEvent.click(screen.getByText(/login/i));
+    expect(
+      await screen.findByText(/Login must be at least 6 characters/i),
+    ).toBeInTheDocument();
+  });
+});
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Testing Successful Login
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+````js
+describe('Form submission', () => {
+  it('should submit successfully with valid data', async () => {
+    render(<App />);
+    await userEvent.type(screen.getByTestId('login-input'), 'validUser');
+    await userEvent.type(screen.getByTestId('password-input'), 'strongPass123');
+    fireEvent.click(screen.getByText(/login/i));
+    expect(await screen.findByText(/Login successful/i
+    ```
+````
